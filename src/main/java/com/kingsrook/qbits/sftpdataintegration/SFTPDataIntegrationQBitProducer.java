@@ -51,7 +51,7 @@ public class SFTPDataIntegrationQBitProducer implements QBitProducer
    {
       QBitMetaData qBitMetaData = new QBitMetaData()
          .withGroupId("com.kingsrook.qbits")
-         .withArtifactId("importFileBulkLoad")
+         .withArtifactId("sftpDataIntegration")
          .withVersion("0.1.0")
          .withNamespace(namespace)
          .withConfig(sftpDataIntegrationQBitConfig);
@@ -64,9 +64,9 @@ public class SFTPDataIntegrationQBitProducer implements QBitProducer
 
 
    /*******************************************************************************
-    ** Getter for importFileBulkLoadQBitConfig
+    ** Getter for sftpDataIntegrationQBitConfig
     *******************************************************************************/
-   public SFTPDataIntegrationQBitConfig getImportFileBulkLoadQBitConfig()
+   public SFTPDataIntegrationQBitConfig getSftpDataIntegrationQBitConfig()
    {
       return (this.sftpDataIntegrationQBitConfig);
    }
@@ -74,9 +74,9 @@ public class SFTPDataIntegrationQBitProducer implements QBitProducer
 
 
    /*******************************************************************************
-    ** Setter for importFileBulkLoadQBitConfig
+    ** Setter for sftpDataIntegrationQBitConfig
     *******************************************************************************/
-   public void setImportFileBulkLoadQBitConfig(SFTPDataIntegrationQBitConfig sftpDataIntegrationQBitConfig)
+   public void setSftpDataIntegrationQBitConfig(SFTPDataIntegrationQBitConfig sftpDataIntegrationQBitConfig)
    {
       this.sftpDataIntegrationQBitConfig = sftpDataIntegrationQBitConfig;
    }
@@ -84,12 +84,13 @@ public class SFTPDataIntegrationQBitProducer implements QBitProducer
 
 
    /*******************************************************************************
-    ** Fluent setter for importFileBulkLoadQBitConfig
+    ** Fluent setter for sftpDataIntegrationQBitConfig
     *******************************************************************************/
-   public SFTPDataIntegrationQBitProducer withImportFileBulkLoadQBitConfig(SFTPDataIntegrationQBitConfig sftpDataIntegrationQBitConfig)
+   public SFTPDataIntegrationQBitProducer withSftpDataIntegrationQBitConfig(SFTPDataIntegrationQBitConfig sftpDataIntegrationQBitConfig)
    {
       this.sftpDataIntegrationQBitConfig = sftpDataIntegrationQBitConfig;
       return (this);
    }
+
 
 }

@@ -136,7 +136,7 @@ public class BaseTest
       // produce our qbit //
       //////////////////////
       new SFTPDataIntegrationQBitProducer()
-         .withImportFileBulkLoadQBitConfig(sftpDataIntegrationQBitConfig)
+         .withSftpDataIntegrationQBitConfig(sftpDataIntegrationQBitConfig)
          .produce(qInstance);
 
       ///////////////////////////////////////////
