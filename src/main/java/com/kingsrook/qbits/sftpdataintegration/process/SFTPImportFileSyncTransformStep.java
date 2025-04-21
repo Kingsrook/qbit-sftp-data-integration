@@ -23,10 +23,10 @@ package com.kingsrook.qbits.sftpdataintegration.process;
 
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 import com.kingsrook.qbits.sftpdataintegration.SFTPDataIntegrationQBitConfig;
 import com.kingsrook.qbits.sftpdataintegration.model.ImportFile;
 import com.kingsrook.qbits.sftpdataintegration.model.ImportFileStatusEnum;
@@ -64,6 +64,8 @@ public class SFTPImportFileSyncTransformStep extends AbstractTransformStep
       .withPluralFutureMessage("were")
       .withSingularPastMessage("was")
       .withPluralPastMessage("were");
+
+   Set<Integer> alreadyImportedFileIds = new HashSet<>();
 
 
 
@@ -115,14 +117,15 @@ public class SFTPImportFileSyncTransformStep extends AbstractTransformStep
       QQueryFilter queryFilter = new QQueryFilter()
          .withCriteria(new QFilterCriteria("sftpImportConfigId", QCriteriaOperator.EQUALS, sftpImportConfig.getId()))
          .withCriteria(new QFilterCriteria("sourcePath", QCriteriaOperator.IN, runBackendStepInput.getRecords().stream().map(r -> r.getValueString("fileName")).toList()));
-      List<QRecord> existingRecords     = QueryAction.execute(ImportFile.TABLE_NAME, queryFilter);
-      Set<String>   existingSourcePaths = existingRecords.stream().map(r -> r.getValueString("sourcePath")).collect(Collectors.toSet());
+      List<QRecord>        existingRecords     = QueryAction.execute(ImportFile.TABLE_NAME, queryFilter);
+      Map<String, Integer> existingSourcePaths = CollectionUtils.listToMap(existingRecords, r -> r.getValueString("sourcePath"), r -> r.getValueInteger("id"));
 
       for(QRecord record : runBackendStepInput.getRecords())
       {
-         if(existingSourcePaths.contains(record.getValueString("fileName")))
+         if(existingSourcePaths.containsKey(record.getValueString("fileName")))
          {
             alreadyImportedLine.incrementCountAndAddPrimaryKey(record.getValueString("fileName"));
+            alreadyImportedFileIds.add(existingSourcePaths.get(record.getValueString("fileName")));
          }
          else
          {

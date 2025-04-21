@@ -31,21 +31,63 @@ import com.kingsrook.qqq.backend.core.actions.tables.DeleteAction;
 import com.kingsrook.qqq.backend.core.actions.tables.InsertAction;
 import com.kingsrook.qqq.backend.core.exceptions.QException;
 import com.kingsrook.qqq.backend.core.logging.QLogger;
+import com.kingsrook.qqq.backend.core.model.actions.processes.ProcessSummaryLine;
+import com.kingsrook.qqq.backend.core.model.actions.processes.ProcessSummaryLineInterface;
 import com.kingsrook.qqq.backend.core.model.actions.processes.RunBackendStepInput;
 import com.kingsrook.qqq.backend.core.model.actions.processes.RunBackendStepOutput;
+import com.kingsrook.qqq.backend.core.model.actions.processes.Status;
 import com.kingsrook.qqq.backend.core.model.actions.tables.delete.DeleteInput;
 import com.kingsrook.qqq.backend.core.model.actions.tables.insert.InsertInput;
 import com.kingsrook.qqq.backend.core.model.data.QRecord;
 import com.kingsrook.qqq.backend.core.processes.implementations.etl.streamedwithfrontend.LoadViaInsertStep;
+import com.kingsrook.qqq.backend.core.processes.implementations.etl.streamedwithfrontend.ProcessSummaryProviderInterface;
+import com.kingsrook.qqq.backend.core.processes.implementations.general.StandardProcessSummaryLineProducer;
+import com.kingsrook.qqq.backend.core.utils.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 
 
 /*******************************************************************************
  ** store files in both the staging filesystem, and build an import record for them
  *******************************************************************************/
-public class SFTPImportFileSyncLoadStep extends LoadViaInsertStep
+public class SFTPImportFileSyncLoadStep extends LoadViaInsertStep implements ProcessSummaryProviderInterface
 {
    private static final QLogger LOG = QLogger.getLogger(SFTPImportFileSyncLoadStep.class);
+
+   private ProcessSummaryLine okToInsertLine = StandardProcessSummaryLineProducer.getOkToInsertLine()
+      .withMessageSuffix(" imported");
+
+   private ProcessSummaryLine alreadyImportedLine = new ProcessSummaryLine(Status.WARNING)
+      .withMessageSuffix(" already imported")
+      .withSingularFutureMessage("was")
+      .withPluralFutureMessage("were")
+      .withSingularPastMessage("was")
+      .withPluralPastMessage("were");
+
+
+
+   /*******************************************************************************
+    **
+    *******************************************************************************/
+   @Override
+   public ArrayList<ProcessSummaryLineInterface> getProcessSummary(RunBackendStepOutput runBackendStepOutput, boolean isForResultScreen)
+   {
+      ////////////////////////////////////////////////////////
+      // make summary line out of already-imported file ids //
+      // for linking in process trace                       //
+      ////////////////////////////////////////////////////////
+      if(getTransformStep() instanceof SFTPImportFileSyncTransformStep sftpImportFileSyncTransformStep)
+      {
+         for(Integer alreadyImportedId : CollectionUtils.nonNullCollection(sftpImportFileSyncTransformStep.alreadyImportedFileIds))
+         {
+            alreadyImportedLine.incrementCountAndAddPrimaryKey(alreadyImportedId);
+         }
+      }
+
+      ArrayList<ProcessSummaryLineInterface> rs = new ArrayList<>();
+      okToInsertLine.addSelfToListIfAnyCount(rs);
+      alreadyImportedLine.addSelfToListIfAnyCount(rs);
+      return (rs);
+   }
 
 
 
@@ -76,6 +118,15 @@ public class SFTPImportFileSyncLoadStep extends LoadViaInsertStep
       // insert them into our table //
       ////////////////////////////////
       super.runOnePage(runBackendStepInput, runBackendStepOutput);
+
+      ///////////////////////////////////////////////////////////////////////////////////////
+      // build an ok-summary line with the file ids --                                     //
+      // this is so the process trace records can link to the import files that were built //
+      ///////////////////////////////////////////////////////////////////////////////////////
+      for(QRecord record : runBackendStepOutput.getRecords())
+      {
+         okToInsertLine.incrementCountAndAddPrimaryKey(record.getValue("id"));
+      }
 
       //////////////////////////////////////////////////////////////////
       // delete all processed files from the source, if so configured //
