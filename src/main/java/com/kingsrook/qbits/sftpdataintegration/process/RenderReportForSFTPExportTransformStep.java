@@ -37,6 +37,7 @@ import com.kingsrook.qqq.backend.core.model.actions.processes.Status;
 import com.kingsrook.qqq.backend.core.model.data.QRecord;
 import com.kingsrook.qqq.backend.core.model.savedreports.SavedReport;
 import com.kingsrook.qqq.backend.core.processes.implementations.etl.streamedwithfrontend.AbstractTransformStep;
+import com.kingsrook.qqq.backend.core.processes.tracing.ProcessTracerKeyRecordMessage;
 import org.apache.commons.lang3.BooleanUtils;
 
 
@@ -60,6 +61,7 @@ public class RenderReportForSFTPExportTransformStep extends AbstractTransformSte
    private ProcessSummaryLine       inactiveConfigLine     = makeErrorSummaryLine(errorLines, "being marked inactive");
    private ProcessSummaryLine       missingReportLine      = makeErrorSummaryLine(errorLines, "missing a Report");
 
+   private boolean firstPage = true;
 
 
    /***************************************************************************
@@ -101,6 +103,15 @@ public class RenderReportForSFTPExportTransformStep extends AbstractTransformSte
    {
       for(SFTPExportConfig sftpExportConfig : runBackendStepInput.getRecordsAsEntities(SFTPExportConfig.class))
       {
+         if(firstPage && runBackendStepInput.getRecords().size()  == 1)
+         {
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // if this is a run of the process for a single record, set that record as the process trace's key record //
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            runBackendStepInput.traceMessage(new ProcessTracerKeyRecordMessage(SFTPExportConfig.TABLE_NAME, sftpExportConfig.getId()));
+            firstPage = false;
+         }
+
          if(!BooleanUtils.isTrue(sftpExportConfig.getIsActive()))
          {
             inactiveConfigLine.incrementCountAndAddPrimaryKey(sftpExportConfig.getId());

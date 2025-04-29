@@ -71,6 +71,8 @@ public class RenderReportForSFTPExportProcessMetaDataProducer extends QBitCompon
          .withTransactionLevelAutoCommit()
          .getProcessMetaData();
 
+      processMetaData.setProcessTracerCodeReference(getQBitConfig().getProcessTracerCodeReference());
+
       return (processMetaData);
    }
 

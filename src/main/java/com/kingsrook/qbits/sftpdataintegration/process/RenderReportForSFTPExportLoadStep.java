@@ -33,6 +33,7 @@ import com.kingsrook.qqq.backend.core.exceptions.QException;
 import com.kingsrook.qqq.backend.core.logging.QLogger;
 import com.kingsrook.qqq.backend.core.model.actions.processes.ProcessSummaryLine;
 import com.kingsrook.qqq.backend.core.model.actions.processes.ProcessSummaryLineInterface;
+import com.kingsrook.qqq.backend.core.model.actions.processes.ProcessSummaryRecordLink;
 import com.kingsrook.qqq.backend.core.model.actions.processes.RunBackendStepInput;
 import com.kingsrook.qqq.backend.core.model.actions.processes.RunBackendStepOutput;
 import com.kingsrook.qqq.backend.core.model.actions.processes.RunProcessInput;
@@ -66,8 +67,11 @@ public class RenderReportForSFTPExportLoadStep extends AbstractLoadStep implemen
       .withSingularPastMessage("was")
       .withPluralPastMessage("were");
 
+   private ProcessSummaryLineInterface fileNameLine;
+
    private ProcessSummaryLine hadErrorLine = new ProcessSummaryLine(Status.ERROR, "had an error generating the report");
 
+   private boolean firstPage = true;
 
 
    /*******************************************************************************
@@ -128,6 +132,14 @@ public class RenderReportForSFTPExportLoadStep extends AbstractLoadStep implemen
             else
             {
                okLine.incrementCountAndAddPrimaryKey(sftpExportConfig.getId());
+
+               if(firstPage && runBackendStepInput.getRecords().size()  == 1)
+               {
+                  //////////////////////////////////////////////////////////////////////////////////////////////
+                  // if this is a run of the process for a single record, add an info line with the file name //
+                  //////////////////////////////////////////////////////////////////////////////////////////////
+                  fileNameLine = new ProcessSummaryRecordLink(Status.INFO, null, null, "The report file was named: " + fileName);
+               }
             }
          }
          catch(Exception e)
@@ -135,6 +147,8 @@ public class RenderReportForSFTPExportLoadStep extends AbstractLoadStep implemen
             hadErrorLine.incrementCountAndAddPrimaryKey(sftpExportConfig.getId());
          }
       }
+
+      firstPage = false;
    }
 
 
@@ -152,6 +166,11 @@ public class RenderReportForSFTPExportLoadStep extends AbstractLoadStep implemen
 
          okLine.addSelfToListIfAnyCount(processSummary);
          processSummary.add(hadErrorLine);
+      }
+
+      if(fileNameLine != null)
+      {
+         processSummary.add(fileNameLine);
       }
 
       return (processSummary);

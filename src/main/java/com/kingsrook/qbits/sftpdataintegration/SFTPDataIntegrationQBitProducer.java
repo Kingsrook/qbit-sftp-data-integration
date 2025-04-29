@@ -52,7 +52,7 @@ public class SFTPDataIntegrationQBitProducer implements QBitProducer
       QBitMetaData qBitMetaData = new QBitMetaData()
          .withGroupId("com.kingsrook.qbits")
          .withArtifactId("sftp-data-integration")
-         .withVersion("0.1.1")
+         .withVersion("0.1.2")
          .withNamespace(namespace)
          .withConfig(sftpDataIntegrationQBitConfig);
       qInstance.addQBit(qBitMetaData);
