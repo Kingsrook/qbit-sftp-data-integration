@@ -23,26 +23,52 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
    <modelVersion>4.0.0</modelVersion>
 
+   <parent>
+      <groupId>com.kingsrook</groupId>
+      <artifactId>qbit-build-parent</artifactId>
+      <version>1.1.0</version>
+   </parent>
+
    <groupId>com.kingsrook.qbits</groupId>
    <artifactId>qbit-sftp-data-integration</artifactId>
-   <version>0.1.2</version>
+   <version>${revision}</version>
+   <packaging>jar</packaging>   
+
+   <name>QBit: SFTP Data Integration</name>
+   <description>SFTP-based data integration QBit for the QQQ framework, providing file import/export capabilities using SFTP servers</description>
+   <url>https://github.com/Kingsrook/qbit-sftp-data-integration</url>
+
+   <licenses>
+      <license>
+         <name>GNU Affero General Public License v3.0</name>
+         <url>https://www.gnu.org/licenses/agpl-3.0.html</url>
+         <distribution>repo</distribution>
+      </license>
+   </licenses>
+
+   <developers>
+      <developer>
+         <id>kingsrook</id>
+         <name>Kingsrook Team</name>
+         <email>contact@kingsrook.com</email>
+         <organization>Kingsrook, LLC</organization>
+         <organizationUrl>https://kingsrook.com</organizationUrl>
+      </developer>
+   </developers>
+
+   <scm>
+      <connection>scm:git:git://github.com/Kingsrook/qbit-sftp-data-integration.git</connection>
+      <developerConnection>scm:git:ssh://github.com:Kingsrook/qbit-sftp-data-integration.git</developerConnection>
+      <url>https://github.com/Kingsrook/qbit-sftp-data-integration</url>
+      <tag>HEAD</tag>
+   </scm>
 
    <properties>
-      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-      <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-      <maven.compiler.source>17</maven.compiler.source>
-      <maven.compiler.target>17</maven.compiler.target>
+      <revision>0.2.0-SNAPSHOT</revision>
    </properties>
 
-   <dependencyManagement>
+ <dependencyManagement>
       <dependencies>
-         <dependency>
-            <groupId>com.kingsrook.qqq</groupId>
-            <artifactId>qqq-bom-pom</artifactId>
-            <version>0.24.0-integration-sprint-61-20250226-223322</version>
-            <type>pom</type>
-            <scope>import</scope>
-         </dependency>
          <dependency>
             <groupId>org.junit</groupId>
             <artifactId>junit-bom</artifactId>
@@ -74,58 +100,5 @@
          <scope>test</scope>
       </dependency>
    </dependencies>
-
-   <build>
-      <plugins>
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-checkstyle-plugin</artifactId>
-            <version>3.1.2</version>
-            <dependencies>
-               <dependency>
-                  <groupId>com.puppycrawl.tools</groupId>
-                  <artifactId>checkstyle</artifactId>
-                  <version>10.16.0</version>
-               </dependency>
-            </dependencies>
-            <executions>
-               <execution>
-                  <id>validate</id>
-                  <phase>validate</phase>
-                  <configuration>
-                     <configLocation>checkstyle/config.xml</configLocation>
-                     <headerLocation>checkstyle/license.txt</headerLocation>
-                     <encoding>UTF-8</encoding>
-                     <consoleOutput>true</consoleOutput>
-                     <failsOnError>false</failsOnError>
-                     <failOnViolation>true</failOnViolation>
-                     <violationSeverity>warning</violationSeverity>
-                     <excludes>**/target/generated-sources/*.*</excludes>
-                     <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                  </configuration>
-                  <goals>
-                     <goal>check</goal>
-                  </goals>
-               </execution>
-            </executions>
-         </plugin>
-      </plugins>
-   </build>
-
-   <repositories>
-      <repository>
-         <id>github-qqq-maven-registry</id>
-         <name>GitHub QQQ Maven Registry</name>
-         <url>https://maven.pkg.github.com/Kingsrook/qqq-maven-registry</url>
-      </repository>
-   </repositories>
-
-   <distributionManagement>
-      <repository>
-         <id>github-qqq-maven-registry</id>
-         <name>GitHub QQQ Maven Registry</name>
-         <url>https://maven.pkg.github.com/Kingsrook/qqq-maven-registry</url>
-      </repository>
-   </distributionManagement>
 
 </project>

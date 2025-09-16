@@ -1,4 +1,8 @@
-# QBit:  SFTP Data Integration
+# QBit: SFTP Data Integration
+
+[![Version](https://img.shields.io/badge/version-0.1.0-blue.svg)](https://github.com/Kingsrook/qbit-sftp-data-integration)
+[![License](https://img.shields.io/badge/license-GNU%20Affero%20GPL%20v3-green.svg)](https://www.gnu.org/licenses/agpl-3.0.en.html)
+[![Java](https://img.shields.io/badge/java-17+-blue.svg)](https://adoptium.net/)
 
 ## Overview
 *Note:  This is one of the original QBit implementations - so, some of the mechanics of how
@@ -27,6 +31,14 @@ The architecture of such an integration looks like:
     * A table built on the QQQ SFTP-backend module, using the `SFTPExportConfig` table as its variant-options table, to serve
       as the destination for files to be imported.
     * A process that renders saved reports, writing their contents to the destination SFTP backend.
+
+## Prerequisites
+
+- **Java 17+** (required for QQQ features)
+- **Maven 3.8+** (for build system)
+- **QQQ Framework** (qqq-backend-module-filesystem >= 0.24.0 for SFTP support)
+- **Active Quartz Scheduler** in your QQQ instance for running scheduled cron jobs
+- **Scheduled Jobs table** in your QQQ instance
 
 ## Usage
 
@@ -133,4 +145,90 @@ public class ImportFileBulkLoadQBitMetaDataLoader extends MetaDataProducer<MetaD
 * An active Quartz scheduler in your QQQ instance, for running scheduled cron jobs, along with Scheduled Jobs table.
 * Meta-data objects produced by `SavedBulkLoadProfileMetaDataProvider` from qqq-backend-core.
 * Meta-data objects produced by `SavedReportsMetaDataProvider` from qqq-backend-core.
+
+## 🤝 Contributing
+
+**Important**: This repository is a component of the QQQ framework. All contributions, issues, and discussions should go through the main QQQ repository.
+
+### Development Workflow
+
+1. **Fork the main QQQ repository**: https://github.com/Kingsrook/qqq
+2. **Create a feature branch**: `git checkout -b feature/amazing-feature`
+3. **Make your changes** (including QBit changes if applicable)
+4. **Run tests**: `mvn test`
+5. **Commit your changes**: `git commit -m 'Add amazing feature'`
+6. **Push to the branch**: `git push origin feature/amazing-feature`
+7. **Open a Pull Request** to the main QQQ repository
+
+### Code Standards
+
+- **Maven**: Follow Maven best practices
+- **Documentation**: Update relevant documentation
+- **Versioning**: Follow semantic versioning
+
+## 📄 License
+
+This project is licensed under the GNU Affero General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
+
+```
+QBit: SFTP Data Integration
+Copyright (C) 2021-2024 Kingsrook, LLC
+651 N Broad St Ste 205 # 6917 | Middletown DE 19709 | United States
+contact@kingsrook.com | https://github.com/Kingsrook/
+```
+
+**Note**: This is a component of the QQQ framework. For the complete license and more information, see the main QQQ repository: https://github.com/Kingsrook/qqq
+
+## 🏢 About Kingsrook
+
+QBit: SFTP Data Integration is built by **[Kingsrook](https://qrun.io)** - making engineers more productive through intelligent automation and developer tools.
+
+- **Website**: [https://qrun.io](https://qrun.io)
+- **Contact**: [contact@kingsrook.com](mailto:contact@kingsrook.com)
+- **GitHub**: [https://github.com/Kingsrook](https://github.com/Kingsrook)
+
+## 🆘 Support & Community
+
+### ⚠️ Important: Use Main QQQ Repository
+
+**All support, issues, discussions, and community interactions should go through the main QQQ repository:**
+
+- **Main Repository**: https://github.com/Kingsrook/qqq
+- **Issues**: https://github.com/Kingsrook/qqq/issues
+- **Discussions**: https://github.com/Kingsrook/qqq/discussions
+- **Wiki**: https://github.com/Kingsrook/qqq.wiki
+
+### Why This Repository Exists
+
+This repository is maintained separately from the main QQQ repository to:
+- **Enable independent QBit development** and versioning
+- **Allow QBit-specific CI/CD** and deployment pipelines
+- **Provide clear separation** between QBit components and core framework concerns
+- **Support different release cycles** for QBits vs. core framework
+
+### Getting Help
+
+- **Documentation**: Check the [QQQ Wiki](https://github.com/Kingsrook/qqq.wiki)
+- **Issues**: Report bugs and feature requests on [Main QQQ Issues](https://github.com/Kingsrook/qqq/issues)
+- **Discussions**: Join community discussions on [Main QQQ Discussions](https://github.com/Kingsrook/qqq/discussions)
+- **Questions**: Ask questions in the main QQQ repository
+
+### Contact Information
+
+- **Company**: Kingsrook, LLC
+- **Email**: contact@kingsrook.com
+- **Website**: https://kingsrook.com
+- **Main GitHub**: https://github.com/Kingsrook/qqq
+
+## 🙏 Acknowledgments
+
+- **QQQ Framework Team**: For the underlying low-code platform
+- **Maven Community**: For the robust build system
+- **Open Source Community**: For the tools and libraries that make this possible
+
+---
+
+**Built with ❤️ by the Kingsrook Team**
+
+**This is a QBit component of the QQQ framework. For complete information, support, and community, visit: https://github.com/Kingsrook/qqq**
 
