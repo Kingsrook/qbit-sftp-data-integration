@@ -21,12 +21,15 @@
   -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-   <modelVersion>4.0.0</modelVersion>
+   
+   <properties>
+      <revision>0.3.0-SNAPSHOT</revision>
+   </properties>
 
    <parent>
       <groupId>com.kingsrook</groupId>
       <artifactId>qbit-build-parent</artifactId>
-      <version>1.1.0</version>
+      <version>1.4.0</version>
    </parent>
 
    <groupId>com.kingsrook.qbits</groupId>
@@ -37,6 +40,8 @@
    <name>QBit: SFTP Data Integration</name>
    <description>SFTP-based data integration QBit for the QQQ framework, providing file import/export capabilities using SFTP servers</description>
    <url>https://github.com/Kingsrook/qbit-sftp-data-integration</url>
+
+   <modelVersion>4.0.0</modelVersion>
 
    <licenses>
       <license>
@@ -63,9 +68,6 @@
       <tag>HEAD</tag>
    </scm>
 
-   <properties>
-      <revision>0.3.0-SNAPSHOT</revision>
-   </properties>
 
  <dependencyManagement>
       <dependencies>
